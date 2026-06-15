@@ -1,109 +1,178 @@
-# San Diego State University Climate Informatics Lab (SCIL) - FCN4AWS
+# FCN4AWS — FourCastNetV2 Hurricane Track Analysis on AWS
 
-A user guide for generating AI weather forecasts using AWS
-
-AI weather predictions have now become more popular as seen by a number of data driven weather forecasting models such as FourCastNet, GenCast, GraphCast, Aurora, and Pangu-Weather. These models have greatly reduced the need for extremely large supercomputing resources and have provided researchers the opportunity to make weather predictions with access to just one GPU. San Diego State University Climate Informatics Lab has already demonstrated the ability of a small research group, in collaboration with university IT department and NVIDIA scientists, to produce high quality AI weather predictions. A user's guide has been created on GitHub to replicate our work.
-
-SCIL provides this user guide which will be primarily useful to research groups and weather enthusiasts who would like to produce high quality global weather forecasts and do not have access to a local or shared GPU cluster. Our approach is then to determine the computational resources required and services which can be provided by cloud computing platforms such as Amazon Web Services.
+Evaluate NVIDIA's FourCastNetV2 (FCNv2) AI weather model against NOAA HURDAT2 ground truth for Atlantic hurricane track forecasting. Runs on an AWS EC2 GPU instance via JupyterLab.
 
 ---
 
-## Step-by-Step Guide to Run FCNv2 Forecasts on AWS
+## Project Overview
 
-### 1. vCPU Quota Request (for New Accounts)
+**Research question:** How accurately does FCNv2 predict Atlantic hurricane tracks compared to observed HURDAT2 data?
 
-If your AWS account is new, your default vCPU quota is likely zero. You will need to request an increase:
+**Pipeline summary:**
+```
+HURDAT2 (NOAA) → noaa_historical_tracks_analysis.ipynb → noaa_data/
+                                                              ↓
+                                              batch_runner.py (called by notebook)
+                                              ERA5 via CDS API → FCNv2 inference
+                                                              ↓
+                                          FCNv2_Visualizations.ipynb → plots & stats
+```
 
-* **Service**: Amazon Elastic Compute Cloud (Amazon EC2)
-* **Quota Name**: Running On-Demand G and VT instances
-* **Request**: Increase to at least **4 vCPUs** at the **Account Level**
+---
 
-### 2. Launch the Deep Learning AMI with GPU Support
+## 1. AWS VM Setup
 
-Create an EC2 instance https://aws.amazon.com/ec2/. Amazon's EC2 services utilize Elastic Block Store (EBS) to provide storage for your EC2 instance. The amount of storage can be adjusted by changing the volume storage. When creating forecasts with the ```ai-models``` plugin you do not require a volume size greater than **blank**. However when using the provided docker container and fine-tuning the original FCN model you must request a minimum volume size of about 60GB and the size will increase depending on how much training data you will provide. Training data can also be stored in an S3 bucket and sync the bucket to the EC2 instance.
+### Recommended instance type
+- **`g4dn.xlarge`** (Tesla T4, 16GB VRAM) — sufficient for FCNv2-small inference
+- AMI: Amazon Linux 2 or Ubuntu 22.04
+- Storage: 100GB+ gp3 (GRIB files and weights are large)
 
-* Open the AMI: **Deep Learning OSS Nvidia Driver AMI GPU PyTorch 2.7 (Amazon Linux 2023)** — version `20250607`
-* This AMI comes with the **NVIDIA driver preinstalled** ✅
-
-### 3. Install Python pip (if not already installed)
+### On a fresh instance, run these once:
 
 ```bash
-sudo yum install python3-pip -y
+# Update system
+sudo yum update -y   # Amazon Linux
+# or: sudo apt update && sudo apt upgrade -y   # Ubuntu
+
+# Install system dependencies for cartopy / eccodes
+sudo yum install -y gcc gcc-c++ python3-devel proj proj-devel geos geos-devel eccodes
+# Ubuntu: sudo apt install -y python3-pip libproj-dev libgeos-dev libeccodes-dev
+
+# Verify GPU
+nvidia-smi
 ```
 
-### 4. Install PyTorch and CUDA Toolkit
+### Install Python dependencies
 
 ```bash
-pip install torch==2.5.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu121 --force-reinstall
+pip install -r requirements.txt --break-system-packages
 ```
 
-### 5. Verify CUDA with `chk_cuda.py`
+> **Note:** `cartopy` may require system-level `proj` and `geos` libraries (installed above).
 
-Use a simple script to verify:
+---
 
-```python
-import torch
-print("Torch version:", torch.__version__)
-print("CUDA available:", torch.cuda.is_available())
-print("CUDA version:", torch.version.cuda)
-print("GPU:", torch.cuda.get_device_name(0) if torch.cuda.is_available() else "None")
-```
+## 2. Configure CDS API (ERA5 access)
 
-### 6. Prepare FourCastNet Directory
+Create a free account at https://cds.climate.copernicus.eu and get your API key from your profile page.
 
 ```bash
-mkdir fourcastnetv2
+cat > ~/.cdsapirc << EOF
+url: https://cds.climate.copernicus.eu/api
+key: YOUR_API_KEY_HERE
+verify: 1
+EOF
+chmod 600 ~/.cdsapirc
+
+# Test it
+python3 -c "import cdsapi; c = cdsapi.Client(); print('CDS connection OK')"
 ```
 
-### 7. Set Up CDS API Credentials
+---
 
-Create a `.cdsapirc` file in your home directory:
+## 3. Download FCNv2 Model Weights
+
+Weights are downloaded automatically via `ai-models` (~3.5GB, stored in `~/.cache/ai-models/`):
 
 ```bash
-nano ~/.cdsapirc
+ai-models --download-assets fourcastnetv2-small
 ```
 
-Paste your credentials from [https://cds.climate.copernicus.eu/how-to-api](https://cds.climate.copernicus.eu/how-to-api):
+> This references NVIDIA's FCNv2 model. For background on the model architecture and training, see the original team's repo: https://github.com/ikhadir/FCN4AWS
 
-```ini
-url: https://cds.climate.copernicus.eu/api/v2
-key: <your-uid>:<your-api-key>
-```
+---
 
-Install the required Python client:
+## 4. Clone This Repo & Launch JupyterLab
 
 ```bash
-pip install "cdsapi>=0.7.4"
-pip install --upgrade attrs
+cd ~/projects
+git clone https://github.com/RalphtheWaldo/FCN4AWS.git
+cd FCN4AWS
+
+# Launch JupyterLab (use tmux/screen so it survives disconnect)
+tmux new -s jupyter
+jupyter lab --no-browser --ip=0.0.0.0 --port=8888
+# Ctrl+B then D to detach
 ```
 
-### 8. Download Precomputed FCNv2 Normalization Files in the fourcastnetv2 Directory
+Access via SSH tunnel from your local machine:
+```bash
+ssh -L 8888:localhost:8888 ec2-user@YOUR_EC2_IP
+```
+Then open `http://127.0.0.1:8888` in your browser.
+
+---
+
+## 5. Run the Pipeline
+
+### Step 1 — Generate NOAA data
+Open and run **`noaa_historical_tracks_analysis.ipynb`** top to bottom.
+
+This downloads HURDAT2 from NOAA, cleans and parses it, and writes two files to `noaa_data/`:
+- `noaa_tracks_clean.csv` — full track records for all Atlantic storms
+- `noaa_storm_starts.csv` — one row per storm with genesis time, location, and category
+
+### Step 2 — Run batch FCNv2 inference
+The notebook above calls **`batch_runner.py`** directly. You can also run it standalone from a terminal (recommended for long overnight runs):
 
 ```bash
-curl -O https://get.ecmwf.int/repository/test-data/ai-models/fourcastnetv2/small/global_means.npy
-curl -O https://get.ecmwf.int/repository/test-data/ai-models/fourcastnetv2/small/global_stds.npy
-curl -O https://get.ecmwf.int/repository/test-data/ai-models/fourcastnetv2/small/weights.tar
+cd ~/projects/FCN4AWS
+python3 batch_runner.py 2>&1 | tee batch_run.log
 ```
 
-### 9. Install the ECMWF AI Models Package
+For each storm (1980+, TS/HU strength), it:
+1. Downloads ERA5 initial conditions via CDS API
+2. Runs FCNv2-small inference (240hr / 10-day lead time)
+3. Extracts the hurricane track via MSLP minimum (NOAA-guided radius search)
+4. Computes haversine error vs HURDAT2 ground truth
+5. Saves results to `fcnv2_batch_results/batch_results.csv`
 
-```bash
-pip install ai-models
-pip install ai-models-fourcastnetv2
+GRIBs are deleted after track extraction to manage disk space.
+
+### Step 3 — Visualize results
+Open and run **`FCNv2_Visualizations.ipynb`**.
+
+Produces spaghetti plots, MSLP time series comparisons, and aggregate error statistics across all processed storms.
+
+---
+
+## 6. File Structure
+
+```
+FCN4AWS/
+├── noaa_historical_tracks_analysis.ipynb   # Step 1: NOAA data download & cleaning
+├── batch_runner.py                          # Step 2: FCNv2 batch inference engine
+├── FCNv2_Visualizations.ipynb              # Step 3: plots & error analysis
+├── requirements.txt
+├── .gitignore
+└── README.md
+
+# Generated on first run (gitignored):
+├── noaa_data/
+│   ├── noaa_tracks_clean.csv
+│   └── noaa_storm_starts.csv
+├── fcnv2_batch_gribs/      # temp storage, deleted after extraction
+├── fcnv2_batch_tracks/     # per-storm FCNv2 track CSVs
+└── fcnv2_batch_results/
+    └── batch_results.csv
 ```
 
-### 10. Generate a Forecast
+---
 
-You’re now ready to generate a forecast using FCNv2:
+## 7. Tips
 
-```bash
-ai-models --input cds --date 20230110 --time 0000 fourcastnetv2-small
-```
+- **Long runs:** Use `tmux` or `screen` so batch inference survives SSH disconnects.
+- **Resume:** `batch_runner.py` skips storms that already have a track file in `fcnv2_batch_tracks/` — safe to restart.
+- **Cost:** A `g4dn.xlarge` runs ~$0.526/hr on-demand. ~609 storms at ~3 min each ≈ 30 hrs ≈ $16 in GPU time.
+- **CDS throttling:** CDS may rate-limit downloads. The batch runner handles retries automatically.
+- **Weights location:** `~/.cache/ai-models/` — these persist across reboots, don't need to re-download.
 
-You should see output confirming that the model is using CUDA:
+---
 
-```
-INFO Using device 'CUDA'. The speed of inference depends greatly on the device.
-```
+## References
 
-This completes your FCNv2 setup using AWS!
+- [FourCastNetV2 (NVIDIA)](https://github.com/NVlabs/FourCastNet)
+- [ai-models (ECMWF)](https://github.com/ecmwf-lab/ai-models)
+- [HURDAT2 dataset (NOAA)](https://www.nhc.noaa.gov/data/#hurdat)
+- [Copernicus CDS (ERA5)](https://cds.climate.copernicus.eu)
+- Original FCN4AWS tutorial repo: https://github.com/ikhadir/FCN4AWS

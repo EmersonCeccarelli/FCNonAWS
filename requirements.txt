@@ -1,0 +1,29 @@
+# ── FCNv2 inference ───────────────────────────────────────────────────────────
+ai-models
+ai-models-fourcastnetv2
+
+# ── ERA5 / CDS data access ────────────────────────────────────────────────────
+cdsapi
+ecmwf-api-client
+
+# ── GRIB file handling ────────────────────────────────────────────────────────
+cfgrib
+pygrib
+eccodes
+
+# ── HDF5 (model weights) ──────────────────────────────────────────────────────
+h5py
+
+# ── Data processing ───────────────────────────────────────────────────────────
+xarray
+numpy
+pandas
+
+# ── Visualization ─────────────────────────────────────────────────────────────
+matplotlib
+cartopy
+Pillow
+
+# ── Jupyter ───────────────────────────────────────────────────────────────────
+jupyterlab
+ipykernel

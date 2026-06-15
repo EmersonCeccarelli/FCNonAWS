@@ -1,0 +1,54 @@
+# ── Generated outputs ─────────────────────────────────────────────────────────
+fcnv2_batch_gribs/
+fcnv2_batch_results/
+fcnv2_batch_tracks/
+
+# ── Downloaded / generated data ───────────────────────────────────────────────
+noaa_data/
+*.grib
+*.grib2
+*.npy
+*.tar
+
+# ── Runtime logs and debug artifacts ─────────────────────────────────────────
+*.log
+*.out
+nohup.out
+batch_run_output.txt
+debug_run_output.txt
+
+# ── Generated images ──────────────────────────────────────────────────────────
+*.png
+*.jpg
+*.jpeg
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+*.so
+
+# ── Jupyter ───────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ── Virtual environments ──────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+
+# ── Secrets / credentials ─────────────────────────────────────────────────────
+.env
+.cdsapirc
+*.pem
+*.key
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Model weights (downloaded automatically via ai-models) ───────────────────
+fourcastnetv2/
