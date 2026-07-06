@@ -34,7 +34,7 @@ In the AWS Console, launch a new instance with **exactly** these settings:
 | **Instance type** | `g4dn.xlarge` (Tesla T4, 16GB VRAM) |
 | **Storage** | 60 GB gp3 |
 | **Key pair** | Create a new `.pem` key pair and save it somewhere safe on your local machine |
-| **Security group** | Allow SSH. Recommended: restrict to **My IP** only. Leaving open to `0.0.0.0/0` works but exposes port 22 to the internet — update the rule if your IP changes |
+| **Security group** | Allow SSH. Recommended: restrict to **My IP** only. Leaving open to `0.0.0.0/0` works but exposes port 22 to the internet (will need to update the rule if your IP changes) |
 
 Once the instance is running, copy the **Public IPv4 address** from the AWS Console.
 
@@ -48,7 +48,7 @@ ssh -i "/path/to/your-key.pem" -L 8888:127.0.0.1:8888 ec2-user@<YOUR_EC2_IP>
 
 The `-L 8888:127.0.0.1:8888` flag sets up the SSH tunnel so JupyterLab is accessible in your local browser at `http://127.0.0.1:8888`.
 
-> **Note:** You must include the `-L` tunnel flag every time you SSH in if you plan to use JupyterLab.
+> **Note:** You should include the `-L` tunnel flag every time you SSH in if you plan to use JupyterLab.
 
 ### 1.3 Activate the PyTorch Environment
 
@@ -126,7 +126,7 @@ The first time you push you'll be prompted for your GitHub username and a Person
 
 ### 1.10 Launch JupyterLab
 
-Use `tmux` so JupyterLab keeps running if your SSH connection drops:
+Optional: Use `tmux` so JupyterLab keeps running if your SSH connection drops:
 
 ```bash
 tmux new -s jupyter
@@ -148,12 +148,12 @@ To reattach to the tmux session later: `tmux attach -t jupyter`
 
 ### Reconnect to a Running Instance
 
-Each time you restart your session, SSH in with the tunnel flag (the IP may change if the instance was stopped — check the AWS Console):
+Each time you restart your session, SSH in with the tunnel flag (the IP will likely change if the instance was stopped — check the AWS Console):
 
 ```bash
 ssh -i "/path/to/your-key.pem" -L 8888:127.0.0.1:8888 ec2-user@<YOUR_EC2_IP>
 source /opt/pytorch/bin/activate
-tmux attach -t jupyter   # reattach to existing JupyterLab session
+tmux attach -t jupyter   # reattach to existing JupyterLab session if applicable
 ```
 
 Then open `http://127.0.0.1:8888` in your browser.
