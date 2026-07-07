@@ -144,22 +144,19 @@ The first time you push you'll be prompted for your GitHub username and a Person
 
 ### 1.10 Launch JupyterLab
 
-Optional: Use `tmux` so JupyterLab keeps running if your SSH connection drops:
-
 ```bash
-tmux new -s jupyter
 cd ~/projects
 jupyter lab --no-browser --ip=127.0.0.1 --port=8888
 ```
 
-Detach from tmux without killing it: `Ctrl+B` then `D`
-
-Open your browser and go to `http://127.0.0.1:8888`. Copy the token from the terminal output when prompted.
-
-To reattach to the tmux session later: 
-```bash
-tmux attach -t jupyter`
-```
+> **Optional but recommended:** Wrap in `tmux` so JupyterLab survives SSH disconnects:
+> ```bash
+> tmux new -s jupyter
+> cd ~/projects
+> jupyter lab --no-browser --ip=127.0.0.1 --port=8888
+> # Detach with Ctrl+B then D
+> # Reconnect later with: tmux attach -t jupyter
+> ```
 
 ---
 
