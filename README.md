@@ -89,6 +89,8 @@ pip install -r requirements.txt
 > sudo dnf install -y proj proj-devel geos geos-devel
 > ```
 
+> **Note:** You may see dependency conflict warnings about `ml-dtypes` and `shap` requiring a newer numpy. These are pre-installed AMI packages and can be safely ignored — they do not affect the FCNv2 pipeline.
+
 ### 1.7 Configure the CDS API Key (ERA5 Access)
 
 Create a free account at https://cds.climate.copernicus.eu and retrieve your API key from your profile page. Then:
