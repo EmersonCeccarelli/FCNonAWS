@@ -77,6 +77,8 @@ git clone https://github.com/EmersonCeccarelli/FCNonAWS.git FCN4AWS
 cd FCN4AWS
 ```
 > **Note:** you will be prompted for a github username and **passkey**
+> **Note:** If you plan to push changes back to GitHub from this instance, you will need to complete step 1.9 (Git credentials) before your first `git push`. Cloning does not require credentials since the repo is public.
+
 
 ### 1.6 Install Python Dependencies
 
@@ -132,6 +134,8 @@ ls -lh ~/.cache/ai-models/fourcastnetv2-small/
 
 ### 1.9 Configure Git Credentials
 
+This must be done on **every new EC2 instance** — credentials are stored on the VM's local filesystem and are lost when the instance is terminated.
+
 So you're not prompted for your username and token on every push:
 
 ```bash
@@ -141,6 +145,8 @@ git config --global user.email "your@email.com"
 ```
 
 The first time you push you'll be prompted for your GitHub username and a Personal Access Token (not your password). After that, credentials are cached permanently.
+
+> **Note:** GitHub Personal Access Tokens are generated at `github.com → Settings → Developer Settings → Personal access tokens → Tokens (classic)`. Make sure the token has `repo` scope.
 
 ### 1.10 Launch JupyterLab
 
