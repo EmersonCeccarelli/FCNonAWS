@@ -111,11 +111,24 @@ python3 -c "import cdsapi; c = cdsapi.Client(); print('CDS OK')"
 
 ### 1.8 Download FCNv2 Model Weights
 
-Weights are ~3.5GB and stored in `~/.cache/ai-models/`. This only needs to be done once:
+The weights are ~3.3GB. Download them directly using `curl -L` (the `-L` flag is required to follow redirects):
 
 ```bash
-ai-models --download-assets fourcastnetv2-small
+mkdir -p ~/.cache/ai-models/fourcastnetv2-small
+cd ~/.cache/ai-models/fourcastnetv2-small
+
+curl -L -O https://get.ecmwf.int/repository/test-data/ai-models/fourcastnetv2/small/global_means.npy
+curl -L -O https://get.ecmwf.int/repository/test-data/ai-models/fourcastnetv2/small/global_stds.npy
+curl -L -O https://get.ecmwf.int/repository/test-data/ai-models/fourcastnetv2/small/weights.tar
 ```
+
+Verify the downloads succeeded — `weights.tar` should be ~3.3GB:
+
+```bash
+ls -lh ~/.cache/ai-models/fourcastnetv2-small/
+```
+
+> **Note:** Do **not** use `ai-models --download-assets fourcastnetv2-small` — it fails due to incompatible `earthkit-data` and `numpy` versions on this AMI. The curl method above bypasses this entirely.
 
 ### 1.9 Configure Git Credentials
 
