@@ -36,6 +36,8 @@ In the AWS Console, launch a new instance with **exactly** these settings:
 | **Key pair** | Create a new `.pem` key pair and save it somewhere safe on your local machine |
 | **Security group** | Allow SSH. Recommended: restrict to **My IP** only. Leaving open to `0.0.0.0/0` works but exposes port 22 to the internet (will need to update the rule if your IP changes) |
 
+> **Note:** The `g4dn.xlarge` instance type is not typically available by default and may require customer service or specific AWS approval to access. Additionally, this instance type automatically attaches a 125 GB NVMe instance store volume (ephemeral0). This cannot be removed but should be free of charge. Data stored on it is lost when the instance is stopped or terminated, which is expected and acceptable since all research code lives in the GitHub repo.
+
 Once the instance is running, copy the **Public IPv4 address** from the AWS Console.
 
 ### 1.2 SSH Into the Instance
