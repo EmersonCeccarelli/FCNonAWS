@@ -4,7 +4,7 @@ ai-models-fourcastnetv2
 
 # ── ERA5 / CDS data access ────────────────────────────────────────────────────
 cdsapi
-ecmwf-api-client
+ecmwf-opendata
 
 # ── GRIB file handling ────────────────────────────────────────────────────────
 cfgrib
