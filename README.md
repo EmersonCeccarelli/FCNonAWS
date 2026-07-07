@@ -156,7 +156,10 @@ Detach from tmux without killing it: `Ctrl+B` then `D`
 
 Open your browser and go to `http://127.0.0.1:8888`. Copy the token from the terminal output when prompted.
 
-To reattach to the tmux session later: `tmux attach -t jupyter`
+To reattach to the tmux session later: 
+```bash
+tmux attach -t jupyter`
+```
 
 ---
 
