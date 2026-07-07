@@ -1,4 +1,4 @@
-# FCNonAWS — FourCastNetV2 Hurricane Track Analysis on AWS
+# FCN4AWS — FourCastNetV2 Hurricane Track Analysis on AWS
 
 Evaluate NVIDIA's FourCastNetV2 (FCNv2) AI weather model against NOAA HURDAT2 ground truth for Atlantic hurricane track forecasting. Runs on an AWS EC2 GPU instance via JupyterLab.
 
@@ -74,6 +74,7 @@ cd ~/projects
 git clone https://github.com/EmersonCeccarelli/FCNonAWS.git FCN4AWS
 cd FCN4AWS
 ```
+> **Note:** you will be prompted for a github username and **passkey**
 
 ### 1.6 Install Python Dependencies
 
