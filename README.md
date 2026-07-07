@@ -77,6 +77,7 @@ git clone https://github.com/EmersonCeccarelli/FCNonAWS.git FCN4AWS
 cd FCN4AWS
 ```
 > **Note:** you will be prompted for a github username and **passkey**
+
 > **Note:** If you plan to push changes back to GitHub from this instance, you will need to complete step 1.9 (Git credentials) before your first `git push`. Cloning does not require credentials since the repo is public.
 
 
