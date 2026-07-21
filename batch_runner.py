@@ -6,9 +6,16 @@ from pathlib import Path
 
 # ── Environment ───────────────────────────────────────────────────────────────
 os.chdir("/home/ec2-user/projects/FCN4AWS")
-os.environ["PATH"]        = f"/home/ec2-user/.local/bin:{os.environ.get('PATH','')}"
-os.environ["CDSAPI_URL"]  = "https://cds.climate.copernicus.eu/api"
-os.environ["CDSAPI_KEY"]  = "c1ede830-04cd-40c0-b598-67bcfc580c9e"
+os.environ["PATH"]       = f"/home/ec2-user/.local/bin:{os.environ.get('PATH','')}"
+os.environ["CDSAPI_URL"] = "https://cds.climate.copernicus.eu/api"
+
+# Read CDS API key from ~/.cdsapirc rather than hardcoding
+import re
+cdsapirc = Path.home() / ".cdsapirc"
+match = re.search(r"key:\s*(.+)", cdsapirc.read_text())
+if not match:
+    raise RuntimeError("Could not find key in ~/.cdsapirc — check your CDS API setup (README step 1.7)")
+os.environ["CDSAPI_KEY"] = match.group(1).strip()
 
 # ── Config ────────────────────────────────────────────────────────────────────
 BASE_DIR    = Path("/home/ec2-user/projects/FCN4AWS")
@@ -31,11 +38,11 @@ def log(msg):
 # ── Load NOAA data ────────────────────────────────────────────────────────────
 log("Loading NOAA data...")
 hurdat = pd.read_csv(
-    BASE_DIR / "noaa_data/noaa_tracks_clean.csv",
+    BASE_DIR / "noaa_tracks_clean.csv",
     parse_dates=["datetime"]
 )
 storm_starts = pd.read_csv(
-    BASE_DIR / "noaa_data/noaa_storm_starts.csv",
+    BASE_DIR / "noaa_storm_starts.csv",
     parse_dates=["start_datetime"]
 )
 
@@ -283,6 +290,7 @@ for i, row in sample.iterrows():
 
     cmd = [
         "ai-models",
+        "--assets", str(Path.home() / ".cache/ai-models/fourcastnetv2-small"),
         "--input", "cds",
         "--date", date_str,
         "--time", time_str,

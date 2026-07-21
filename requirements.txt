@@ -1,6 +1,6 @@
 # ── FCNv2 inference ───────────────────────────────────────────────────────────
-ai-models
-ai-models-fourcastnetv2
+ai-models==0.7.4
+ai-models-fourcastnetv2==0.0.3
 
 # ── ERA5 / CDS data access ────────────────────────────────────────────────────
 cdsapi
@@ -16,14 +16,17 @@ h5py
 
 # ── Data processing ───────────────────────────────────────────────────────────
 xarray
-numpy
+numpy<2
 pandas
 
 # ── Visualization ─────────────────────────────────────────────────────────────
 matplotlib
-cartopy
+cartopy==0.25.0
 Pillow
 
 # ── Jupyter ───────────────────────────────────────────────────────────────────
 jupyterlab
 ipykernel
+
+# ── Compatibility pins (earthkit-data for ai-models 0.7.4) ───────────────────
+earthkit-data>=0.11.3,<1.0
