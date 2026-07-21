@@ -229,25 +229,24 @@ Return to **`noaa_historical_tracks_analysis.ipynb`** and run the final four cel
 
 ```
 FCN4AWS/
-├── noaa_historical_tracks_analysis.ipynb   # Step 1: NOAA data download & cleaning
+├── noaa_historical_tracks_analysis.ipynb   # Step 1 & 3: NOAA data download, cleaning, and visualizations
 ├── batch_runner.py                          # Step 2: FCNv2 batch inference engine
-├── FCNv2_Visualizations.ipynb              # Step 3: plots & error analysis
+├── FCNv2_Visualizations.ipynb              # Additional visualization and analysis cells
 ├── requirements.txt
 ├── .gitignore
 └── README.md
 
 # Generated on first run (gitignored — not in repo):
-├── noaa_data/
-│   ├── noaa_tracks_clean.csv
-│   └── noaa_storm_starts.csv
-├── fcnv2_batch_gribs/      # temp GRIB storage, deleted after each storm
-├── fcnv2_batch_tracks/     # per-storm FCNv2 track CSVs
+├── noaa_tracks_clean.csv           # full track records for all Atlantic storms
+├── noaa_storm_starts.csv           # one row per storm with genesis time, location, and category
+├── fcnv2_batch_gribs/              # temp GRIB storage, deleted after each storm
+├── fcnv2_batch_tracks/             # per-storm FCNv2 track CSVs
 └── fcnv2_batch_results/
     └── batch_results.csv
 
 # Lives outside the repo (set up in Phase 1):
-~/.cdsapirc                 # CDS API credentials
-~/.cache/ai-models/         # FCNv2 model weights (~3.5GB)
+~/.cdsapirc                         # CDS API credentials
+~/.cache/ai-models/                 # FCNv2 model weights (~3.3GB)
 ```
 
 ---
