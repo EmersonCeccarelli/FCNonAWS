@@ -204,27 +204,24 @@ Downloads HURDAT2 from NOAA, cleans and parses it, and writes to `noaa_data/`:
 
 ### Step 2 — Run Batch FCNv2 Inference
 
-The NOAA notebook calls **`batch_runner.py`** directly. For long overnight runs, call it from the terminal instead:
+The batch runner is a long-running process (~1.7 hrs for 32 storms). Run it from a terminal tab in JupyterLab, not from the notebook:
 
 ```bash
 cd ~/projects/FCN4AWS
-python3 batch_runner.py 2>&1 | tee batch_run.log
+nohup python3 batch_runner.py > batch_run.log 2>&1 &
+echo $!
 ```
 
-For each storm (1980+, TS/HU strength) it:
-1. Downloads ERA5 initial conditions via CDS API
-2. Runs FCNv2-small inference (240hr / 10-day lead time)
-3. Extracts the hurricane track via MSLP minimum
-4. Computes haversine error vs HURDAT2 ground truth
-5. Saves results to `fcnv2_batch_results/batch_results.csv`
+Monitor progress:
+```bash
+tail -f ~/projects/FCN4AWS/batch_run.log
+```
 
-GRIBs are deleted after track extraction to manage disk space. The runner skips storms that already have a track file in `fcnv2_batch_tracks/` — safe to restart after interruption.
+The runner skips storms that already have a track file in `fcnv2_batch_tracks/` — safe to restart after interruption. GRIBs are deleted after each storm to manage disk space. When complete, results are saved to `fcnv2_batch_results/batch_results.csv`.
 
 ### Step 3 — Visualize Results
 
-Open and run **`FCNv2_Visualizations.ipynb`**.
-
-Produces spaghetti plots, MSLP time series comparisons, and aggregate error statistics.
+Return to **`noaa_historical_tracks_analysis.ipynb`** and run the final four cells. These generate spaghetti plots and error analysis comparing FCNv2 predicted tracks against HURDAT2 ground truth, and save the output PNGs to the project directory.
 
 ---
 
