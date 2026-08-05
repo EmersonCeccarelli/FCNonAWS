@@ -1,10 +1,14 @@
-# FCN4AWS — FourCastNetV2 Hurricane Track Analysis on AWS
+# SDSU SCIL AWS AI Weather Forecast
 
-Evaluate NVIDIA's FourCastNetV2 (FCNv2) AI weather model against NOAA HURDAT2 ground truth for Atlantic hurricane track forecasting. Runs on an AWS EC2 GPU instance via JupyterLab.
+### by Emerson Ceccarelli
+
+###Suppervised by Distinguished Professor Samuel Shen
 
 ---
 
 ## Project Overview
+
+Evaluate NVIDIA's FourCastNetV2 (FCNv2) AI weather model against NOAA HURDAT2 ground truth for Atlantic hurricane track forecasting. Runs on an AWS EC2 GPU instance via JupyterLab.
 
 **Research question:** How accurately does FCNv2 predict Atlantic hurricane tracks compared to observed HURDAT2 data?
 
