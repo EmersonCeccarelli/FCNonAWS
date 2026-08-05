@@ -1,8 +1,8 @@
 # SDSU SCIL AWS AI Weather Forecast
 
-###### by Emerson Ceccarelli
+##### by Emerson Ceccarelli
 
-###### Suppervised by Distinguished Professor Samuel Shen
+##### Suppervised by Distinguished Professor Samuel Shen
 
 ---
 
