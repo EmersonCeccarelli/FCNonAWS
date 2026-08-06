@@ -49,10 +49,14 @@ The `-L 8888:127.0.0.1:8888` flag sets up the SSH tunnel so JupyterLab is access
 
 > **Note:** You should include the `-L` tunnel flag every time you SSH in if you plan to use JupyterLab.
 
+---
+
 ![Step 1.2 — Successful SSH connection with tunnel established](images/setup/1.2-ssh-connection.png)
 <!--
 *Screenshot: Terminal showing a successful SSH login banner for the EC2 instance.*
 -->
+
+---
 
 ### 1.3 Activate the PyTorch Environment
 
@@ -64,10 +68,14 @@ source /opt/pytorch/bin/activate
 
 You should see `(pytorch)` appear in your terminal prompt. All subsequent commands should be run inside this environment.
 
+---
+
 ![Step 1.3 — Terminal prompt showing (pytorch) environment active](images/setup/1.3-pytorch-env.png)
 <!--
 *Screenshot: Terminal prompt prefixed with `(pytorch)` after activation.*
 -->
+
+---
 
 ### 1.4 Install JupyterLab
 
@@ -75,10 +83,14 @@ You should see `(pytorch)` appear in your terminal prompt. All subsequent comman
 pip install jupyterlab
 ```
 
+---
+
 ![Step 1.4 — JupyterLab install completing successfully](images/setup/1.4-install-jupyterlab.png)
 <!--
 *Screenshot: Terminal output showing `pip install jupyterlab` finishing without errors.*
 -->
+
+---
 
 ### 1.5 Set Up Project Directory & Clone the Repo
 
@@ -92,10 +104,14 @@ cd FCN4AWS
 > **Note:** you will be prompted for a github username and **passkey**
 > **Note:** If you plan to push changes back to GitHub from this instance, you will need to complete step 1.9 (Git credentials) before your first `git push`. Cloning does not require credentials since the repo is public.
 
+---
+
 ![Step 1.5 — Repo cloned into ~/projects/FCN4AWS](images/setup/1.5-clone-repo.png)
 <!--
 *Screenshot: Terminal showing the completed `git clone` and resulting directory listing.*
 -->
+
+---
 
 ### 1.6 Install Python Dependencies
 
@@ -123,10 +139,14 @@ print('Patch applied')
 "
 ```
 
+---
+
 ![Step 1.6 — Dependencies installed and weights_only patch applied](images/setup/1.6-install-dependencies.png)
 <!--
 *Screenshot: Terminal showing `pip install -r requirements.txt` completing and "Patch applied" printed.*
 -->
+
+---
 
 ### 1.7 Configure the CDS API Key (ERA5 Access)
 
@@ -147,10 +167,14 @@ Test it:
 python3 -c "import cdsapi; c = cdsapi.Client(); print('CDS OK')"
 ```
 
+---
+
 ![Step 1.7 — CDS API key configured and tested](images/setup/1.7-cds-api-key.png)
 <!--
 *Screenshot: CDS profile page showing the API key location, and/or terminal printing "CDS OK".*
 -->
+
+---
 
 ### 1.8 Download FCNv2 Model Weights
 
@@ -172,10 +196,14 @@ ls -lh ~/.cache/ai-models/fourcastnetv2-small/
 
 > **Note:** Do **not** use `ai-models --download-assets fourcastnetv2-small` — it fails due to incompatible `earthkit-data` and `numpy` versions on this AMI. The curl method above bypasses this entirely.
 
+---
+
 ![Step 1.8 — Model weights downloaded and verified (~3.3GB)](images/setup/1.8-download-weights.png)
 <!--
 *Screenshot: Terminal `ls -lh` output confirming `weights.tar` is ~3.3GB.*
 -->
+
+---
 
 ### 1.9 Launch JupyterLab
 
@@ -192,6 +220,8 @@ jupyter lab --no-browser --ip=127.0.0.1 --port=8888
 > # Detach with Ctrl+B then D
 > # Reconnect later with: tmux attach -t jupyter
 > ```
+
+---
 
 ![Step 1.9 — JupyterLab running in the browser at 127.0.0.1:8888](images/setup/1.9-launch-jupyterlab.png)
 <!--
