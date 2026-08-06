@@ -28,10 +28,14 @@ In the AWS Console, launch a new instance with **exactly** these settings:
 
 Once the instance is running, copy the **Public IPv4 address** from the AWS Console.
 
+---
+
 ![Step 1.1 — Launching the EC2 instance with the settings above](images/setup/1.1-launch-instance.png)
 <!--
 *Screenshot: AWS Console "Launch an instance" screen showing AMI, instance type, storage, key pair, and security group settings.*
 -->
+
+---
 
 ### 1.2 SSH Into the Instance
 
