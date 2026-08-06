@@ -19,6 +19,7 @@ debug_run_output.txt
 
 # ── Generated images ──────────────────────────────────────────────────────────
 *.png
+!images/**
 *.jpg
 *.jpeg
 
