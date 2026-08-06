@@ -51,7 +51,7 @@ Then open `http://127.0.0.1:8888` in your browser.
 
 ### Step 1 — Generate NOAA Data
 
-Open and run **`noaa_historical_tracks_analysis.ipynb`** top to bottom.
+Open and run **`noaa_historical_tracks_analysis.ipynb`** cells 1 through 14.
 
 Downloads HURDAT2 from NOAA, cleans and parses it, and writes to `noaa_data/`:
 - `noaa_tracks_clean.csv` — full track records for all Atlantic storms
