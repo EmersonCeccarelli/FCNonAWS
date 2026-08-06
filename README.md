@@ -48,10 +48,14 @@ tmux attach -t jupyter   # reattach to existing JupyterLab session if applicable
 
 Then open `http://127.0.0.1:8888` in your browser.
 
+---
+
 ![Connect to an Instance](images/workflow/0-reconnect.png)
 <!--
 *Screenshot: Terminal showing successful SSH reconnect and `tmux attach` into the running JupyterLab session.*
 -->
+
+---
 
 ### Step 1 — Generate NOAA Data
 
@@ -61,10 +65,14 @@ Downloads HURDAT2 from NOAA, cleans and parses it, and writes to `noaa_data/`:
 - `noaa_tracks_clean.csv` — full track records for all Atlantic storms
 - `noaa_storm_starts.csv` — one row per storm with genesis time, location, and category
 
+---
+
 ![Step 1 — noaa_historical_tracks_analysis.ipynb running in JupyterLab](images/workflow/1-generate-noaa-data.png)
 <!--
 *Screenshot: JupyterLab notebook after running all cells, showing the `noaa_data/` output files.*
 -->
+
+---
 
 ### Step 2 — Run Batch FCNv2 Inference
 
@@ -84,14 +92,20 @@ tail -f ~/projects/FCN4AWS/batch_run.log
 
 The runner skips storms that already have a track file in `fcnv2_batch_tracks/` — safe to restart after interruption. GRIBs are deleted after each storm to manage disk space. When complete, results are saved to `fcnv2_batch_results/batch_results.csv`.
 
+---
+
 ![Step 2 — batch_runner.py in progress, tailing the log](images/workflow/2-batch-inference.png)
 <!--
 *Screenshot: Terminal showing `tail -f batch_run.log` with storms processing.*
 -->
 
+---
+
 ### Step 3 — Visualize Results
 
 Return to **`noaa_historical_tracks_analysis.ipynb`** and run the final four cells. These generate spaghetti plots and error analysis comparing FCNv2 predicted tracks against HURDAT2 ground truth, and save the output PNGs to the project directory.
+
+---
 
 ![Step 3 — Spaghetti plot and error analysis output](images/workflow/3-visualize-results.png)
 <!--
