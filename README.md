@@ -7,7 +7,7 @@
 
 ## Project Overview
 
-![Results Image](images/workflow/spaghetti_fcnv2_vs_hurdat2.png)
+![Results Image](images/workflow/bavi_track-20260707.png)
 
 Evaluate NVIDIA's FourCastNetV2 (FCNv2) AI weather model against NOAA HURDAT2 ground truth for Atlantic hurricane track forecasting. Runs on an AWS EC2 GPU instance via JupyterLab.
 
