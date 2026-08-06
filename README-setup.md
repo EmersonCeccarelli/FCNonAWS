@@ -157,26 +157,7 @@ ls -lh ~/.cache/ai-models/fourcastnetv2-small/
 ![Step 1.8 — Model weights downloaded and verified (~3.3GB)](images/setup/1.8-download-weights.png)
 *Screenshot: Terminal `ls -lh` output confirming `weights.tar` is ~3.3GB.*
 
-### 1.9 Configure Git Credentials
-
-This must be done on **every new EC2 instance** — credentials are stored on the VM's local filesystem and are lost when the instance is terminated.
-
-So you're not prompted for your username and token on every push:
-
-```bash
-git config --global credential.helper store
-git config --global user.name "YourGitHubUsername"
-git config --global user.email "your@email.com"
-```
-
-The first time you push you'll be prompted for your GitHub username and a Personal Access Token (not your password). After that, credentials are cached permanently.
-
-> **Note:** GitHub Personal Access Tokens are generated at `github.com → Settings → Developer Settings → Personal access tokens → Tokens (classic)`. Make sure the token has `repo` scope.
-
-![Step 1.9 — GitHub Personal Access Token creation screen](images/setup/1.9-git-credentials.png)
-*Screenshot: GitHub "Generate new token (classic)" page with `repo` scope checked.*
-
-### 1.10 Launch JupyterLab
+### 1.9 Launch JupyterLab
 
 ```bash
 cd ~/projects
@@ -192,7 +173,7 @@ jupyter lab --no-browser --ip=127.0.0.1 --port=8888
 > # Reconnect later with: tmux attach -t jupyter
 > ```
 
-![Step 1.10 — JupyterLab running in the browser at 127.0.0.1:8888](images/setup/1.10-launch-jupyterlab.png)
+![Step 1.9 — JupyterLab running in the browser at 127.0.0.1:8888](images/setup/1.9-launch-jupyterlab.png)
 *Screenshot: Local browser showing the JupyterLab file browser after connecting through the tunnel.*
 
 ---
